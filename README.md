@@ -1,0 +1,4 @@
+HawkBot
+=======
+
+Lightweight IRC bot 
