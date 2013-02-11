@@ -13,6 +13,12 @@ public class HawkBot extends PircBot {
 			String time = new java.util.Date().toString();
 			sendMessage(channel, sender + ": The time is now " + time);
 		}
+		else if(message.startsWith("!opme") {
+			if(sender.equalsIgnoreCase("gomeow") {
+				op(channel, sender);
+				sendMessage(channel, "I think we should op gomeow!");
+			}
+		}
 		else if (message.startsWith("!cookie")) {
 			if (args.length == 1){
 			sendAction(channel, "gives everyone a cookie!");
