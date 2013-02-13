@@ -11,11 +11,16 @@ public class HawkBotMain {
         bot.setVerbose(true);
         
         // Connect to the IRC server.
-        bot.connect("irc.esper.net");
+        //bot.connect("irc.esper.net");
+        bot.connect("irc.freenode.net");
+
 
         // Join the #mctag channel.
-        bot.joinChannel("#mctag");
-        
+        bot.joinChannel("#hawkfalcon");
+       // bot.joinChannel("#infinitenight");
+      // // bot.joinChannel("#mctag");
+        bot.joinChannel("#gomeow");
+
     }
     
 }
