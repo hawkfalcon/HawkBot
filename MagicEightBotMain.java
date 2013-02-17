@@ -1,11 +1,11 @@
 import org.jibble.pircbot.*;
 
-public class HawkBotMain {
+public class MagicEightBotMain {
     
     public static void main(String[] args) throws Exception {
         
         // Now start our bot up.
-    	HawkBot bot = new HawkBot();
+    	MagicEightBot bot = new MagicEightBot();
         
         // Enable debugging output.
         bot.setVerbose(true);
@@ -16,7 +16,7 @@ public class HawkBotMain {
 
 
         // Join the #mctag channel.
-        bot.joinChannel("#hawkfalcon");
+        //bot.joinChannel("#hawkfalcon");
        // bot.joinChannel("#infinitenight");
         bot.joinChannel("#mctag");
         bot.joinChannel("#gomeow");
