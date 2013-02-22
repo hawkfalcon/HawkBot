@@ -4,12 +4,12 @@ HawkBot
 Lightweight IRC bot 
 
 To compile:
-javac -classpath /path/HawkBot/pircbot.jar /path/HawkBot/HawkBot.java /path/HawkBot/HawkBotMain.java 
+javac -classpath /path/HawkBot/pircbot.jar /path/HawkBot/HawkBot.java 
 
 To run:
 cd /path/HawkBot
-java -classpath pircbot.jar:. HawkBotMain
+java -classpath pircbot.jar:. HawkBot
 (for windows, replace : with ;)
 
 To select channel:
-In HawkBotMain, change #mctag to your channel
+In HawkBot, change #mctag to your channel
