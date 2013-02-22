@@ -1,33 +1,39 @@
 import java.util.Random;
 
-import org.jibble.pircbot.*;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.Listener;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.InviteEvent;
+import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
-public class HawkBot extends PircBot {
-
-	public HawkBot() {
-		this.setName("HawkBot");
+public class HawkBot extends ListenerAdapter implements Listener {
+	@Override
+	public void onInvite(InviteEvent event){
+	event.getBot().joinChannel(event.getChannel());
+	event.getBot().sendMessage(event.getChannel(), "Hello, I am HawkBot. Thank you for inviting me to your channel!");
 	}
-	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel){
-    joinChannel(channel);
-    sendMessage(channel, "Hello, I am HawkBot. Thank you for inviting me to your channel!");
-	}
-
-	public void onMessage(String channel, String sender, String login, String hostname, String message) {
+    
+	@Override
+	public void onMessage(MessageEvent event) throws Exception{
 		String delims = "[ ]+";
-		String[] args = message.split(delims);
-		String lmessage = message.toLowerCase();
+		String[] args = event.getMessage().split(delims);
+		String message = event.getMessage().toLowerCase();
+		String sender = event.getUser().getNick();
+		
 		// [!time]
 		if (message.equalsIgnoreCase("!time")) {
 			String time = new java.util.Date().toString();
-			sendMessage(channel, sender + ": The time is now " + time);
+			event.respond("The time is now " + time);
 		}
 		// [!cookie]
 		else if (message.startsWith("!cookie")) {
 			if (args.length == 1){
-				sendAction(channel, "gives everyone a cookie!");
+				event.getBot().sendAction(event.getChannel(),  "gives everyone a cookie!");
 			}
 			else if ((args.length < 3) && (args.length > 1)){
-				sendAction(channel, "gives " + args[1] + " a cookie!");
+				event.getBot().sendAction(event.getChannel(),  "gives " + args[1] + " a cookie!");
 			}
 			else {
 				StringBuilder sb = new StringBuilder();
@@ -35,85 +41,108 @@ public class HawkBot extends PircBot {
 					sb.append(args[i]);
 					sb.append(" ");
 				}
-				sendAction(channel, "gives " + args[1] + " a cookie for " + sb);
+				event.getBot().sendAction(event.getChannel(),  "gives " + args[1] + " a cookie for " + sb);
 			}
 		}
 		// [!whip]
-		else if (message.startsWith("!whip")) {
-			sendAction(channel, "whips " + args[1] + "!");
-		}
+				else if (message.startsWith("!whip")) {
+					if (args.length == 1){
+						event.getBot().sendAction(event.getChannel(),  "whips everyone!");
+					}
+					else if ((args.length < 3) && (args.length > 1)){
+						event.getBot().sendAction(event.getChannel(),  "whips " + args[1]);
+					}
+					else {
+						StringBuilder sb = new StringBuilder();
+						for(int i = 2; i < (args.length); i++) {
+							sb.append(args[i]);
+							sb.append(" ");
+						}
+						event.getBot().sendAction(event.getChannel(),  "whips " + args[1] + " because " + sb);
+					}
+				}
 		// [!greet]
 		else if (message.startsWith("!greet")) {
-			sendAction(channel, "greets " + args[1] + "!");
+			event.getBot().sendAction(event.getChannel(),  "greets " + args[1] + "!");
 		}
 		// [!list]
 		else if (message.startsWith("!list")) {
 			StringBuilder sbs = new StringBuilder();
-			for (User user : getUsers(channel)){
+			for (User user : event.getBot().getUsers(event.getChannel())){
 				sbs.append(user.getNick() + ", ");
 			}
-			sendNotice(sender, "Users: " + sbs.toString());
+			event.getBot().sendNotice(sender, "Users: " + sbs.toString());
 		}
-			/*for (User user : getUsers(channel)){
-				sendMessage(channel, user.getNick());
-
-			}
-
-  		}
-		// [!help]
-				else if (message.startsWith("!help")) {
-					sendAction(channel, "will not help you!");
-				}
-		// [!hi]
-				else if (message.startsWith("!hi")) {
-					sendMessage(channel, "!bye");
-				}
-		// [!bye]
-				else if (message.startsWith("!bye")) {
-					sendMessage(channel, "!hi");
-				}
-		// [!bye]
-				else if (message.startsWith("!smack")) {
-					sendMessage(channel, "Ow!");
-					sendMessage(channel, "!smack");
-
-				}
-				else if (message.startsWith("H")) {
-					sendMessage(channel, "Hi, I'm TheEpicMineBot!");
-				for (User user : getUsers(channel)){
-					sendMessage(channel, user.getNick());
-				}
-			 */
-			// [!boringhistuff]
+			
+			// [!boringhistuff] 
 			else if (message.startsWith("!hi")) {
-				sendMessage(channel, "Hello!");
-				sendMessage(channel, "How are you today?");
-				sendMessage(channel, sender + " is fine!");
-				sendMessage(channel, "What's up?");
+				 event.getBot().sendMessage(event.getChannel(),"Hello!");
+				 event.getBot().sendMessage(event.getChannel(),"How are you today?");
+				 event.getBot().sendMessage(event.getChannel(),sender + " is fine!");
+				 event.getBot().sendMessage(event.getChannel(),"What's up?");
 			}
 			// [!boringbyestuff]
 			else if (message.startsWith("!bye")) {
-				sendMessage(channel, "Bye!");
-				sendMessage(channel, "Have fun!");
-				sendMessage(channel, "See you soon!");
+				event.getBot().sendMessage(event.getChannel(),"Bye!");
+				event.getBot().sendMessage(event.getChannel(), "Have fun!");
+				event.getBot().sendMessage(event.getChannel(),"See you soon!");
 			}
-			else if (lmessage.contains("hawkbot") && message.contains("?")){
+		    // [!code]
+		    else if (message.startsWith("!code")) {
+		    event.getBot().sendMessage(event.getChannel(), sender + " wants to see the code!");
+		    }
+	         // [!link]
+	        else if (message.startsWith("!link")) {
+	        event.getBot().sendMessage(event.getChannel(),sender + " wants the link!");
+	        }
+	        // [!brb]
+	        else if (message.startsWith("!brb")) {
+	        event.getBot().sendMessage(event.getChannel(),sender + " will be right back!");
+	        }
+		
+		
+		 	else if (message.contains("hawkbot") && message.contains("?")){
 				Random rand = new Random();
 				if (rand.nextBoolean()) {
-					sendMessage(channel, "Yes.");
+					 event.getBot().sendMessage(event.getChannel(),"Yes.");
 				}
 				else {
-					sendMessage(channel, "No.");
+					 event.getBot().sendMessage(event.getChannel(),"No.");
 				}
 			//sendAction(channel, "doesn't want to!");
 			//sendAction(channel, "loves you because you mentioned him!");
 				
 
 		}
-			else if ((lmessage.contains("meaning") && lmessage.contains("life"))
-					|| (lmessage.contains("life") && lmessage.contains("universe") && lmessage.contains("everything"))){
-        sendMessage(channel, "42!");
+			else if ((message.contains("meaning") && message.contains("life"))
+					|| (message.contains("life") && message.contains("universe") && message.contains("everything"))){
+				 event.getBot().sendMessage(event.getChannel(),"42!");
 		} 
 
 	}
+	@Override
+	public void onPrivateMessage(PrivateMessageEvent event) {
+		String delims = "[ ]+";
+		String[] args = event.getMessage().split(delims);
+		String message = event.getMessage().toLowerCase();
+		if (message.startsWith("!say")){
+			StringBuilder sb = new StringBuilder();
+			for(int i = 2; i < (args.length); i++) {
+				sb.append(args[i]);
+				sb.append(" ");
+			}
+        event.getBot().sendMessage(args[1], sb.toString());
+			
+		}
+	}
+    public static void main(String[] args) throws Exception {
+        PircBotX bot = new PircBotX();
+        bot.setName("HawkBot");
+        bot.connect("irc.esper.net");
+        bot.joinChannel("#hawkfalcon");
+        bot.joinChannel("#mctag");
+        bot.joinChannel("#gomeow");
+		bot.getListenerManager().addListener(new HawkBot());
+
+    }
 }
