@@ -63,8 +63,19 @@ public class HawkBot extends ListenerAdapter implements Listener {
 					}
 				}
 		// [!greet]
+        else if(message.startsWith("!join")) {
+            if(args.length==2) {
+               String channel = args[1];
+               if(!channel.startsWith("#")) {
+                   channel = "#" + args[1];
+               }
+               event.getBot().joinChannel(channel);
+            } else {
+                event.respond("pleas provide a valid channel!");
+            }
+        }
 		else if (message.startsWith("!greet")) {
-            if(args.length==1) {
+            if(args.length==2) {
                 event.getBot().sendAction(event.getChannel(), "greets " + args[1] + "!");
             }
             }
