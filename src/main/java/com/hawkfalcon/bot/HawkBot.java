@@ -1,3 +1,4 @@
+package com.hawkfalcon.bot;
 import java.util.Random;
 
 import org.pircbotx.PircBotX;
@@ -62,9 +63,22 @@ public class HawkBot extends ListenerAdapter implements Listener {
 					}
 				}
 		// [!greet]
+        else if(message.startsWith("!join")) {
+            if(args.length==2) {
+               String channel = args[1];
+               if(!channel.startsWith("#")) {
+                   channel = "#" + args[1];
+               }
+               event.getBot().joinChannel(channel);
+            } else {
+                event.respond("pleas provide a valid channel!");
+            }
+        }
 		else if (message.startsWith("!greet")) {
-			event.getBot().sendAction(event.getChannel(),  "greets " + args[1] + "!");
-		}
+            if(args.length==2) {
+                event.getBot().sendAction(event.getChannel(), "greets " + args[1] + "!");
+            }
+            }
 		// [!list]
 		else if (message.startsWith("!list")) {
 			StringBuilder sbs = new StringBuilder();
@@ -132,17 +146,16 @@ public class HawkBot extends ListenerAdapter implements Listener {
 				sb.append(" ");
 			}
         event.getBot().sendMessage(args[1], sb.toString());
-			
 		}
 	}
     public static void main(String[] args) throws Exception {
-        PircBotX bot = new PircBotX();
-        bot.setName("HawkBot");
-        bot.connect("irc.esper.net");
-        bot.joinChannel("#hawkfalcon");
-        bot.joinChannel("#mctag");
-        bot.joinChannel("#gomeow");
-		bot.getListenerManager().addListener(new HawkBot());
-
+        Bot bot = new Bot();
+        bot.connect("irc.esper.net", 6669, "LOLNOPE");
+        bot.joinChannel("#NickIsTesting");
+        bot.joinChannel("#Hawkfalcon");
+        bot.joinChannel("#shocknetwork");
+        bot.setVerbose(true);
+        bot.sendMessage("#NickIsTesting", "Testing");
+        bot.getListenerManager().addListener(new HawkBot());
     }
 }
